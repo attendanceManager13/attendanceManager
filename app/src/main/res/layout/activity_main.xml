@@ -4,37 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/emailId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="315dp"
-        android:text="enter email"
-        app:layout_constraintBottom_toTopOf="@+id/password"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="170dp" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="enter password"
-        android:inputType="numberPassword"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="125dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:text="login"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        tools:layout_editor_absoluteX="161dp" />
-
-</android.support.constraint.ConstraintLayout>
+    tools:context=".MainActivity"/>
