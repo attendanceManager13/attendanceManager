@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AttendanceManager</string>
+    <string name="action_logout_text">logout</string>
 </resources>
