@@ -48,7 +48,17 @@ public class MainActivity extends AppCompatActivity {
                         // close drawer when item is tapped
                         drawerLayout.closeDrawers();
 
-                        //startActivity(new Intent(MainActivity.this,SubjectsActivity.class));
+                        switch (menuItem.getItemId()){
+                            case R.id.nav_subjects:
+                                startActivity(new Intent(MainActivity.this,SubjectsActivity.class));
+                                break;
+                            case R.id.nav_time_table:
+                                startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
+                                break;
+
+                        }
+
+
 
                         return true;
                     }
