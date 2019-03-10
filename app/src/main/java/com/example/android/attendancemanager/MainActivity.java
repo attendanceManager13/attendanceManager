@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
 
@@ -94,5 +94,5 @@ public class MainActivity extends AppCompatActivity {
     private void logout() {
         mAuth.signOut();
         sentToLogin();
-    }
+    }*/
 }
