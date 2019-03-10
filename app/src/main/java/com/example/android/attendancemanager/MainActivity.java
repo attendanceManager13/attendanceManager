@@ -55,11 +55,7 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.nav_time_table:
                                 startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
                                 break;
-
                         }
-
-
-
                         return true;
                     }
                 });
@@ -98,7 +94,12 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
-                    });
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
             AlertDialog alert = builder.create();
             alert.show();
         }
