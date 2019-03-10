@@ -2,6 +2,10 @@ package com.example.android.attendancemanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,17 +22,39 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     //private Toolbar toolbar;
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //toolbar = findViewById(R.id.main_toolbar);
-        //setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("your attendance app");
         mAuth = FirebaseAuth.getInstance();
-        //FirebaseApp.initializeApp(MainActivity.this);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        //startActivity(new Intent(MainActivity.this,SubjectsActivity.class));
+
+                        return true;
+                    }
+                });
+
+
 
 
 
@@ -80,9 +106,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()){
-                case R.id.logout_btn:
+            case R.id.logout_btn:
                     logout();
                     return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
 
                 default:
                     return false;
@@ -90,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 
     private void logout() {
         mAuth.signOut();
