@@ -1,5 +1,6 @@
 package com.example.android.attendancemanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +24,19 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     //private Toolbar toolbar;
+    RecyclerView recyclerView;
+    final Context context=this;
+    MainAdapter adapter;
+    List<MainModel> proList=new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -59,12 +70,14 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
-
-
-
-
-
+        recyclerView =findViewById(R.id.rec_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        proList.add(new MainModel(1,"Maths","Status: On Track",45));
+        proList.add(new MainModel(2,"Physics","Status: On Track",60));
+        adapter=new MainAdapter(this,proList);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

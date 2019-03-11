@@ -7,10 +7,10 @@
     android:fitsSystemWindows="true">
 
 
-    <FrameLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,9 +18,16 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
-    </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rec_view"
+        android:paddingTop="?attr/actionBarSize"
+        >
 
+    </android.support.v7.widget.RecyclerView>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

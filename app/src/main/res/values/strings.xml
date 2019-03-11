@@ -8,4 +8,5 @@
     <string name="notifications">Notifications</string>
     <string name="time_table">Time Table</string>
     <string name="title_activity_subjects">SubjectsActivity</string>
+    <string name="progstatus">%1$d%</string>
 </resources>

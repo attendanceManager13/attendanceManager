@@ -2,7 +2,7 @@ package com.example.android.attendancemanager;
 
 public class Gmodel {
     private int id;
-    private String item,nameTime;
+    private String item;
     Gmodel(int id, String item) {
         this.id = id;
         this.item = item;
@@ -15,6 +15,5 @@ public class Gmodel {
     String getItem() {
         return item;
     }
-
 }
 
