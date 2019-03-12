@@ -75,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         proList.add(new MainModel(1,"Maths","Status: On Track",45));
+        adapter.notifyDataSetChanged();
         proList.add(new MainModel(2,"Physics","Status: On Track",60));
+        adapter.notifyDataSetChanged();;
         adapter=new MainAdapter(this,proList);
         recyclerView.setAdapter(adapter);
     }

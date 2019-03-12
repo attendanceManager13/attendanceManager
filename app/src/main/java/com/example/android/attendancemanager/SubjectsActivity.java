@@ -6,31 +6,29 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SubjectsActivity extends AppCompatActivity {
+public class SubjectsActivity extends AppCompatActivity implements SubAdapter.ItemClickListener{
 
-    ArrayList<String> listItems = new ArrayList<>();
-    ArrayAdapter<String> adapter;
-    private ListView myListView;
+    ArrayList<String> SubNames = new ArrayList<>();
+    SubAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subjects);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        myListView = findViewById(R.id.listView);
-        adapter= new ArrayAdapter<String>(SubjectsActivity.this,android.R.layout.simple_list_item_1,listItems);
-        myListView.setAdapter(adapter);
-
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,20 +39,28 @@ public class SubjectsActivity extends AppCompatActivity {
                         .setAction("Undo", undoOnClickListener).show();
             }
         });
-
+        RecyclerView recyclerView = findViewById(R.id.re_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        adapter = new SubAdapter(this, SubNames);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
     View.OnClickListener undoOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            listItems.remove(listItems.size()-1);
+            SubNames.remove(SubNames.size()-1);
             adapter.notifyDataSetChanged();
             Snackbar.make(view,"item removed",Snackbar.LENGTH_LONG).setAction("Action",null).show();
 
         }
     };
 
-
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + (position+1), Toast.LENGTH_SHORT).show();
+    }
     private void addListItem(){
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.add_subject_prompt,null);
@@ -68,7 +74,7 @@ public class SubjectsActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String name = input.getText().toString();
-                listItems.add(name);
+                SubNames.add(name);
                 adapter.notifyDataSetChanged();
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

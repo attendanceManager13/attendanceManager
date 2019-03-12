@@ -12,14 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static android.support.constraint.Constraints.TAG;
-interface RecyclerViewClickListener{
-    void onClick(View view,int position);
-}
-
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     private Context mCtx;
-    private RecyclerViewClickListener mListener;
     private List<Gmodel> proList;
 
     RecAdapter(Context mCtx, List<Gmodel> proList) {
@@ -31,7 +25,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     public RecViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater=LayoutInflater.from(mCtx);
         @SuppressLint("InflateParams") View view=inflater.inflate(R.layout.activity_makecards,null);
-        return new RecViewHolder(view,mListener);
+        return new RecViewHolder(view);
     }
     @Override
     public void onBindViewHolder(@NonNull RecViewHolder recViewHolder, int i) {
@@ -44,18 +38,11 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
         return proList.size();
     }
 
-    class RecViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class RecViewHolder extends RecyclerView.ViewHolder{
         TextView textView1;
-        private RecyclerViewClickListener mListener;
-        RecViewHolder(@NonNull View itemView,RecyclerViewClickListener listener) {
+        RecViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1=itemView.findViewById(R.id.t1);
-            mListener=listener;
-            itemView.setOnClickListener(this);
-        }
-        @Override
-        public void onClick(View view){
-            mListener.onClick(view,getAdapterPosition());
         }
     }
 }
