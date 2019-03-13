@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".TimeTableActivity"></activity>
-        <activity
-            android:name=".SubjectsActivity"
-            android:label="@string/title_activity_subjects"
-            android:theme="@style/NoActionBar" />
+        <activity android:name=".NewSubjectActivity"
+            android:parentActivityName=".AddSubjectsActivity"></activity>
+        <activity android:name=".AddSubjectsActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".TimeTableActivity" />
         <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait" />

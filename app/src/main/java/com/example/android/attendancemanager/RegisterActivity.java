@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText email;
@@ -24,6 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private FirebaseAuth mAuth;
     private Button login;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +52,17 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful())
                                 {
+
+
                                     mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful())
-                                                Toast.makeText(RegisterActivity.this,"registered Succesfully. Please verify your email address",Toast.LENGTH_LONG).show();
+                                            if(task.isSuccessful()) {
+                                                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                                                String uid = currentUser.getUid();
+                                                db.collection("users").document(uid);
+                                                Toast.makeText(RegisterActivity.this, "registered Succesfully. Please verify your email address", Toast.LENGTH_LONG).show();
+                                            }
 
                                             else {
 

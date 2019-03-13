@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()){
                             case R.id.nav_subjects:
-                                startActivity(new Intent(MainActivity.this,SubjectsActivity.class));
+                                startActivity(new Intent(MainActivity.this,AddSubjectsActivity.class));
                                 break;
                             case R.id.nav_time_table:
                                 startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        proList.add(new MainModel(1,"Maths","Status: On Track",45));
-        adapter.notifyDataSetChanged();
-        proList.add(new MainModel(2,"Physics","Status: On Track",60));
-        adapter.notifyDataSetChanged();;
+        //proList.add(new MainModel(1,"Maths","Status: On Track",45));
+        //adapter.notifyDataSetChanged();
+        //proList.add(new MainModel(2,"Physics","Status: On Track",60));
+       // adapter.notifyDataSetChanged();;
         adapter=new MainAdapter(this,proList);
         recyclerView.setAdapter(adapter);
     }
