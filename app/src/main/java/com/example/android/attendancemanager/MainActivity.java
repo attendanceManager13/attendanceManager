@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 });
         recyclerView =findViewById(R.id.rec_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(null);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //proList.add(new MainModel(1,"Maths","Status: On Track",45));
-        //adapter.notifyDataSetChanged();
+        proList.add(new MainModel(1,"Maths","Status: On Track",45));
         //proList.add(new MainModel(2,"Physics","Status: On Track",60));
        // adapter.notifyDataSetChanged();;
         adapter=new MainAdapter(this,proList);
+        adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
     }
 
