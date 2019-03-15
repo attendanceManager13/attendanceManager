@@ -33,8 +33,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             MainModel model=proList.get(i);
             mainViewHolder.textView1.setText(model.getSubname());
             mainViewHolder.textView2.setText(model.getStatus());
-            mainViewHolder.textView3.setText(String.valueOf(model.getProgress()));
+            mainViewHolder.textView3.setText(model.getProgtext());
             mainViewHolder.progressBar.setProgress(model.getProgress());
+            mainViewHolder.b1.setText(model.getPlus());
+            mainViewHolder.b2.setText(model.getMinus());
     }
 
     @Override
@@ -43,7 +45,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder{
-        TextView textView1,textView2,textView3,per;
+        TextView textView1,textView2,textView3;
         Button b1,b2;
         ProgressBar progressBar;
         MainViewHolder(@NonNull View itemView) {
@@ -54,7 +56,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             progressBar=itemView.findViewById(R.id.progressBar);
             b1=itemView.findViewById(R.id.b1);
             b2=itemView.findViewById(R.id.b2);
-            per=itemView.findViewById(R.id.per);
         }
     }
 }
