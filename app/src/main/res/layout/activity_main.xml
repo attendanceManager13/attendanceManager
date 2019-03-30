@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
@@ -19,14 +21,19 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rec_view"
-        android:paddingTop="?attr/actionBarSize"
-        >
-    </android.support.v7.widget.RecyclerView>
+        android:paddingTop="5dp"
+        android:layout_below="@id/content_frame">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rec_view"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+</RelativeLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.example.android.attendancemanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,8 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +48,19 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        recyclerView =findViewById(R.id.rec_view);
+        recyclerView.setHasFixedSize(true);
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        proList.add(new MainModel(1,"Maths","Status: On Track",45,"+","-","45"));
+        //proList.add(new MainModel(2,"Physics","Status: On Track",60));
+        // adapter.notifyDataSetChanged();;
+        adapter=new MainAdapter(this,proList);
+        adapter.setHasStableIds(true);
+        recyclerView.setAdapter(adapter);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
@@ -70,16 +85,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        recyclerView =findViewById(R.id.rec_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        proList.add(new MainModel(1,"Maths","Status: On Track",45));
-        //proList.add(new MainModel(2,"Physics","Status: On Track",60));
-       // adapter.notifyDataSetChanged();;
-        adapter=new MainAdapter(this,proList);
-        adapter.setHasStableIds(true);
-        recyclerView.setAdapter(adapter);
     }
 
     @Override
