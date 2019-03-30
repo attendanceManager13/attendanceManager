@@ -31,6 +31,8 @@ public class TimeTableActivity extends AppCompatActivity {
         proList.add(new Gmodel(3,"Wednesday"));
         proList.add(new Gmodel(4,"Thursday"));
         proList.add(new Gmodel(5,"Friday"));
+        proList.add(new Gmodel(6,"Saturday"));
+        proList.add(new Gmodel(7,"Sunday"));
         adapter=new RecAdapter(this,proList);
         recyclerView.setAdapter(adapter);
 

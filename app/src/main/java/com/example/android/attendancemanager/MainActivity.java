@@ -23,24 +23,35 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.Locale.US;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    //private Toolbar toolbar;
+
     RecyclerView recyclerView;
     final Context context=this;
     MainAdapter adapter;
     List<MainModel> proList=new ArrayList<>();
+    List<DocumentSnapshot> subjects = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +61,39 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         recyclerView =findViewById(R.id.rec_view);
         recyclerView.setHasFixedSize(true);
+
         ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        proList.add(new MainModel(1,"Maths","Status: On Track",45,"+","-","45"));
-        //proList.add(new MainModel(2,"Physics","Status: On Track",60));
-        // adapter.notifyDataSetChanged();;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String stringDate = sdf.format(new Date());
+        FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            subjects = task.getResult().getDocuments();
+                            for (int i = 0; i < subjects.size(); i++) {
+                                proList.add(new MainModel((Long) subjects.get(i).get("priority"), subjects.get(i).get("name").toString(), "Status: On Track", 45, "+", "-", "45"));
+
+                            }
+                        }
+                        else
+                        {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+                            alertDialog.setTitle("Alert");
+                            alertDialog.setMessage("no record for today");
+                            alertDialog.setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
+
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+                    }
+                });
         adapter=new MainAdapter(this,proList);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);

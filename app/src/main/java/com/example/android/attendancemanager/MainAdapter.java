@@ -34,7 +34,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             mainViewHolder.textView1.setText(model.getSubname());
             mainViewHolder.textView2.setText(model.getStatus());
             mainViewHolder.textView3.setText(model.getProgtext());
-            mainViewHolder.progressBar.setProgress(model.getProgress());
+            //mainViewHolder.progressBar.setProgress(model.getProgress());
             mainViewHolder.b1.setText(model.getPlus());
             mainViewHolder.b2.setText(model.getMinus());
     }
