@@ -17,13 +17,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class DayActivity extends AppCompatActivity {
+
+
+
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection("days");
+    private CollectionReference cr;
     private SubjectAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle extras = getIntent().getExtras();
+        final String newString = extras.getString("name");
+        cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_subjects);
         FloatingActionButton fab = findViewById(R.id.button_add_subject);
@@ -32,9 +38,11 @@ public class DayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewSubjectActivity.class);
                 intent.putExtra("activityName", "DayActivity");
+                intent.putExtra("dayName",newString);
                 startActivity(intent);
             }
         });
+
         setUpRecyclerView();
     }
 

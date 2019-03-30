@@ -51,13 +51,16 @@ public class NewSubjectActivity extends AppCompatActivity {
 
         FirebaseAuth mAuth  = FirebaseAuth.getInstance();
         String newString;
+        String dayName;
         Bundle extras;
         extras = getIntent().getExtras();
         newString = extras.getString("activityName");
         if(newString.equals("AddSubjectsActivity"))
             cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
-        else if(newString.equals("DayActivity"))
-            cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection("days");
+        else if(newString.equals("DayActivity")) {
+            dayName = extras.getString("dayName");
+            cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(dayName);
+        }
 
 
 

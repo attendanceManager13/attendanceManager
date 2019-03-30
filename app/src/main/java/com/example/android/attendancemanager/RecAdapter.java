@@ -20,7 +20,7 @@ import java.util.List;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     private Context mCtx;
-    private OnItemClickListener listener;
+
     private List<Gmodel> proList;
 
 
@@ -37,13 +37,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     }
     @Override
     public void onBindViewHolder(@NonNull RecViewHolder recViewHolder, int i) {
-        Gmodel gmodel=proList.get(i);
+        final Gmodel gmodel=proList.get(i);
         recViewHolder.textView1.setText(gmodel.getItem());
         recViewHolder.textView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                    view.getContext().startActivity(new Intent(view.getContext(),DayActivity.class));
+                    Intent intent = new Intent(view.getContext(),DayActivity.class);
+                    intent.putExtra("name",gmodel.getItem());
+                    view.getContext().startActivity(intent);
 
             }
         });
@@ -62,11 +63,6 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
 
         }
     }
-    public interface  OnItemClickListener{
-        void onItemClick(DocumentSnapshot documentSnapshot, int position);
-    }
-    public void setOnItemClickListener(OnItemClickListener listener)
-    {
-        this.listener = listener;
-    }
+
+
 }
