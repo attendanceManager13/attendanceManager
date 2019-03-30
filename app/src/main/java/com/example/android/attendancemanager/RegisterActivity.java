@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText confirm_pass;
     private Button register;
     private FirebaseAuth mAuth;
-    private Button login;
+    private TextView login;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser currentUser;
     @Override

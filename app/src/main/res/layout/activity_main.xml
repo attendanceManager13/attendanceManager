@@ -26,7 +26,6 @@
         android:id="@+id/rec_view"
         android:paddingTop="?attr/actionBarSize"
         >
-
     </android.support.v7.widget.RecyclerView>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
