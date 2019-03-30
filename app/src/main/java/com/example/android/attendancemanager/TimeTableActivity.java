@@ -7,6 +7,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,5 +33,6 @@ public class TimeTableActivity extends AppCompatActivity {
         proList.add(new Gmodel(5,"Friday"));
         adapter=new RecAdapter(this,proList);
         recyclerView.setAdapter(adapter);
+
     }
 }

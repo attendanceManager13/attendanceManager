@@ -1,5 +1,6 @@
 package com.example.android.attendancemanager;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAdapter.SubjectHolder> {
 
@@ -42,6 +44,13 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
             super(itemView);
             name = itemView.findViewById(R.id.subject_name);
             priority = itemView.findViewById(R.id.subject_priority);
+
+
+
+                }
+
         }
     }
-}
+
+
+

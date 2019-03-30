@@ -11,18 +11,19 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class NewSubjectActivity extends AppCompatActivity {
     private EditText subject_name;
     private NumberPicker priority;
     private Button save_button;
+    private CollectionReference cr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_subject);
 
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        //setTitle("add subject");
+
 
         subject_name = findViewById(R.id.edit_text_subject);
         priority = findViewById(R.id.priority_number_picker);
@@ -49,7 +50,17 @@ public class NewSubjectActivity extends AppCompatActivity {
         }
 
         FirebaseAuth mAuth  = FirebaseAuth.getInstance();
-        CollectionReference cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
+        String newString;
+        Bundle extras;
+        extras = getIntent().getExtras();
+        newString = extras.getString("activityName");
+        if(newString.equals("AddSubjectsActivity"))
+            cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
+        else if(newString.equals("DayActivity"))
+            cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection("days");
+
+
+
         cr.add(new Subject(subject,subject_priority));
         Toast.makeText(NewSubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
         finish();

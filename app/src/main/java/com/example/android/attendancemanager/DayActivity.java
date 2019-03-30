@@ -5,27 +5,23 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class AddSubjectsActivity extends AppCompatActivity {
-    private FirebaseAuth  mAuth = FirebaseAuth.getInstance();
+public class DayActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference cr = db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
+    private CollectionReference cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection("days");
     private SubjectAdapter adapter;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +31,7 @@ public class AddSubjectsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewSubjectActivity.class);
-                intent.putExtra("activityName", "AddSubjectsActivity");
+                intent.putExtra("activityName", "DayActivity");
                 startActivity(intent);
             }
         });
@@ -43,7 +39,7 @@ public class AddSubjectsActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        Query query = cr.orderBy("priority",Query.Direction.DESCENDING);
+        Query query = cr.orderBy("priority",Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Subject> options = new FirestoreRecyclerOptions.Builder<Subject>().setQuery(query,Subject.class).build();
 
         adapter = new SubjectAdapter(options);

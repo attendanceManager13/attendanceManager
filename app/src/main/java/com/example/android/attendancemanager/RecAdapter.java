@@ -2,6 +2,7 @@ package com.example.android.attendancemanager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,11 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     private Context mCtx;
+    private OnItemClickListener listener;
     private List<Gmodel> proList;
+
 
     RecAdapter(Context mCtx, List<Gmodel> proList) {
         this.mCtx = mCtx;
@@ -31,6 +39,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     public void onBindViewHolder(@NonNull RecViewHolder recViewHolder, int i) {
         Gmodel gmodel=proList.get(i);
         recViewHolder.textView1.setText(gmodel.getItem());
+        recViewHolder.textView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    view.getContext().startActivity(new Intent(view.getContext(),DayActivity.class));
+
+            }
+        });
     }
 
     @Override
@@ -43,6 +59,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
         RecViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1=itemView.findViewById(R.id.t1);
+
         }
+    }
+    public interface  OnItemClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
+        this.listener = listener;
     }
 }

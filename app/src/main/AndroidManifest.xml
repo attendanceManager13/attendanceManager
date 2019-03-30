@@ -13,10 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NewSubjectActivity"
-            android:parentActivityName=".AddSubjectsActivity"></activity>
-        <activity android:name=".AddSubjectsActivity"
-            android:launchMode="singleTop"/>
+        <activity android:name=".DayActivity"></activity>
+        <activity
+            android:name=".NewSubjectActivity"
+            android:parentActivityName=".AddSubjectsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddSubjectsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity android:name=".TimeTableActivity" />
         <activity
             android:name=".ForgotPasswordActivity"
