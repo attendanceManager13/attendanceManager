@@ -43,7 +43,7 @@ public class AddSubjectsActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        Query query = cr.orderBy("priority",Query.Direction.DESCENDING);
+        Query query = cr.orderBy("percentage",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Subject> options = new FirestoreRecyclerOptions.Builder<Subject>().setQuery(query,Subject.class).build();
 
         adapter = new SubjectAdapter(options);

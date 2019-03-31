@@ -22,7 +22,10 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
     @Override
     protected void onBindViewHolder(@NonNull SubjectHolder holder, int position, @NonNull Subject model) {
         holder.name.setText(model.getName());
-        holder.priority.setText(String.valueOf(model.getPriority()));
+        //holder.priority.setText(String.valueOf(position+1));
+        holder.attended_lectures.setText(String.valueOf(model.getAttended_lectures()));
+        holder.total_lectures.setText(String.valueOf(model.getTotal_lectures()));
+        holder.percentage.setText(String.valueOf(model.getPercentage()));
     }
 
     @NonNull
@@ -39,11 +42,17 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
 
     class SubjectHolder extends RecyclerView.ViewHolder{
          TextView name;
-         TextView priority;
+         //TextView priority;
+         TextView attended_lectures;
+         TextView total_lectures;
+         TextView percentage;
         public SubjectHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.subject_name);
-            priority = itemView.findViewById(R.id.subject_priority);
+            //priority = itemView.findViewById(R.id.subject_priority);
+            attended_lectures = itemView.findViewById(R.id.attended_lectures);
+            total_lectures = itemView.findViewById(R.id.total_lectures);
+            percentage = itemView.findViewById(R.id.percentage);
 
 
 

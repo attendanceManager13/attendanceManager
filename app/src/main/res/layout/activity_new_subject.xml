@@ -15,12 +15,24 @@
         android:hint="Subject"
         android:inputType="text"
         />
-    <NumberPicker
+    <EditText
+        android:id="@+id/edit_text_attended_lectures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Attended lectures"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/edit_text_total_lectures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Total Lectures"
+        android:inputType="number"/>
+    <!--<NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/priority_number_picker">
 
-    </NumberPicker>
+    </NumberPicker>-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
