@@ -3,43 +3,35 @@ package com.example.android.attendancemanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Locale.US;
+//import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,11 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     RecyclerView recyclerView;
     final Context context=this;
-    MainAdapter adapter;
+    private MainAdapter adapter;
     List<MainModel> proList=new ArrayList<>();
     List<DocumentSnapshot> subjects = new ArrayList<>();
+    CollectionReference cr;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,44 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        recyclerView =findViewById(R.id.rec_view);
-        recyclerView.setHasFixedSize(true);
+        setupRecyclerView();
 
-        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        String stringDate = sdf.format(new Date());
-        FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            subjects = task.getResult().getDocuments();
-                            for (int i = 0; i < subjects.size(); i++) {
-                                proList.add(new MainModel((Long) subjects.get(i).get("priority"), subjects.get(i).get("name").toString(), "Status: On Track", 45, "+", "-", "45"));
-
-                            }
-                        }
-                        else
-                        {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                            alertDialog.setTitle("Alert");
-                            alertDialog.setMessage("no record for today");
-                            alertDialog.setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
-
-                                        }
-                                    });
-                            alertDialog.show();
-                        }
-                    }
-                });
-        adapter=new MainAdapter(this,proList);
-        adapter.setHasStableIds(true);
-        recyclerView.setAdapter(adapter);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -126,9 +84,50 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void setupRecyclerView() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String stringDate = sdf.format(new Date());
+
+            cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
+
+
+            Query query = cr.orderBy("priority", Query.Direction.ASCENDING);
+            FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
+
+            adapter = new MainAdapter(options);
+            recyclerView = findViewById(R.id.rec_view);
+            recyclerView.setHasFixedSize(true);
+
+            ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+            adapter.setHasStableIds(true);
+            recyclerView.setAdapter(adapter);
+
+        /*catch (Exception e)
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setTitle("alert");
+            dialog.setMessage("no record for today exists,got to time table activity for entering records");
+            dialog.setPositiveButton("OK",null);
+            dialog.show();
+
+        }*/
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+        adapter.startListening();
 
         sentToLogin();
     }

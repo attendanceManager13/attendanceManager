@@ -1,29 +1,26 @@
 package com.example.android.attendancemanager;
 
 public class MainModel {
-    private long id,progress;
-    private String subname,status,plus,minus,progtext;
-    public MainModel(long id, String subname,String status,long progress,String plus,String minus,String progtext) {
-        this.id = id;
-        this.subname = subname;
-        this.status=status;
-        this.progress=progress;
-        this.plus=plus;
-        this.minus=minus;
-        this.progtext=progtext;
+    private long priority;
+    private int progress=45;
+    private String name,status="45",plus="+",minus="-",progtext="on track";
+    public MainModel(){}
+    public MainModel(long priority, String name) {
+        this.priority = priority;
+        this.name = name;
+
     }
 
     public long getId() {
-        return id;
+        return priority;
     }
-
-    public String getSubname() {
-        return subname;
+    public String getName() {
+        return name;
     }
     public String getStatus(){
         return status;
     }
-    public long getProgress(){
+    public int getProgress(){
         return progress;
     }
     String getPlus(){
@@ -32,7 +29,5 @@ public class MainModel {
     String getMinus(){
         return minus;
     }
-    String getProgtext(){
-        return progtext;
-    }
+    String getProgtext(){ return progtext; }
 }

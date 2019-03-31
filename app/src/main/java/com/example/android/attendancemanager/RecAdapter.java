@@ -24,7 +24,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
     private List<Gmodel> proList;
 
 
-    RecAdapter(Context mCtx, List<Gmodel> proList) {
+    public RecAdapter(Context mCtx, List<Gmodel> proList) {
         this.mCtx = mCtx;
         this.proList = proList;
     }
