@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">AttendanceManager</string>
-    <string name="action_logout_text">logout</string>
+    <string name="action_logout_text">Logout</string>
     <string name="enter_your_email_address">Enter your email address</string>
     <string name="reset_password">Reset Password</string>
-    <string name="home">home</string>
+    <string name="home">Home</string>
     <string name="subjects">Subjects</string>
     <string name="notifications">Notifications</string>
     <string name="time_table">Time Table</string>
