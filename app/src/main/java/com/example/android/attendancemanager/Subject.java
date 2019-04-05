@@ -5,10 +5,10 @@ public class Subject {
     //private int priority;
     private int attended_lectures;
     private int total_lectures;
-    private int percentage;
+    private float percentage;
 
     public Subject(){}
-    public Subject(String subject,int attended_lectures,int total_lectures,int percentage) {
+    public Subject(String subject,int attended_lectures,int total_lectures,float percentage) {
         this.name = subject;
 
         this.attended_lectures = attended_lectures;
@@ -32,7 +32,7 @@ public class Subject {
         return attended_lectures;
     }
 
-    public int getPercentage() {
+    public float getPercentage() {
         return percentage;
     }
 

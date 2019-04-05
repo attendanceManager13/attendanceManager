@@ -52,7 +52,7 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
             //priority = itemView.findViewById(R.id.subject_priority);
             attended_lectures = itemView.findViewById(R.id.attended_lectures);
             total_lectures = itemView.findViewById(R.id.total_lectures);
-            percentage = itemView.findViewById(R.id.percentage);
+            percentage = itemView.findViewById(R.id.total_percentage);
 
 
 

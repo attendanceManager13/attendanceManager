@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".NewDaySubjectActivity"></activity>
         <activity android:name=".DayActivity"></activity>
         <activity
             android:name=".NewSubjectActivity"

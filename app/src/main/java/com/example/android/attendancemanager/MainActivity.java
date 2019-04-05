@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
 
 
-            Query query = cr.orderBy("priority", Query.Direction.ASCENDING);
+            Query query = cr.orderBy("name", Query.Direction.ASCENDING);
             FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
 
             adapter = new MainAdapter(options);

@@ -13,6 +13,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DecimalFormat;
+
 public class NewSubjectActivity extends AppCompatActivity {
     private EditText subject_name;
     //private NumberPicker priority;
@@ -70,7 +72,8 @@ public class NewSubjectActivity extends AppCompatActivity {
 
 
 
-        int percentage = (Integer.valueOf(attended)/Integer.valueOf(total))*100;
+        float percentage = (Float.parseFloat(attended)/Float.parseFloat(total))*100;
+        percentage = Float.valueOf(new DecimalFormat("#.##").format(percentage));
         cr.add(new Subject(subject,Integer.valueOf(attended),Integer.valueOf(total),percentage));
         Toast.makeText(NewSubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
         finish();
