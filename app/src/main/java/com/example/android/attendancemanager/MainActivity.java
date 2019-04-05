@@ -31,8 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-//import com.google.firebase.auth.FirebaseAuth;
-
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -53,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        sentToLogin();
         setupRecyclerView();
 
         setSupportActionBar(toolbar);
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         String stringDate = sdf.format(new Date());
-
             cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
 
 
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             adapter.setHasStableIds(true);
             recyclerView.setAdapter(adapter);
-
         /*catch (Exception e)
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);

@@ -2,14 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ab47bc"
+    android:background="@drawable/bighead"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
 
     <EditText
         android:id="@+id/reg_email_id"
-        android:layout_width="wrap_content"
+        android:layout_width="260sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -30,7 +30,7 @@
 
     <EditText
         android:id="@+id/confirm_pass"
-        android:layout_width="wrap_content"
+        android:layout_width="260sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -49,7 +49,7 @@
     </EditText>
     <EditText
         android:id="@+id/reg_password"
-        android:layout_width="wrap_content"
+        android:layout_width="260sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -68,7 +68,7 @@
 
     <Button
         android:id="@+id/register_btn"
-        android:layout_width="150dp"
+        android:layout_width="260sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
