@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="@drawable/bighead"
     tools:context=".NewSubjectActivity">
     
     <EditText
@@ -13,19 +14,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Subject"
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
         android:inputType="text"
         />
     <EditText
         android:id="@+id/edit_text_attended_lectures"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Attended lectures"
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
         android:inputType="number"/>
     <EditText
         android:id="@+id/edit_text_total_lectures"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Total Lectures"
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
         android:inputType="number"/>
     <!--<NumberPicker
         android:layout_width="wrap_content"
@@ -36,6 +43,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/save_button"/>
+        android:id="@+id/save_button"
+        android:text="add"/>
 
 </LinearLayout>

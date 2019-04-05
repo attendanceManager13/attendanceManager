@@ -2,6 +2,8 @@ package com.example.android.attendancemanager;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,16 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
         //holder.priority.setText(String.valueOf(position+1));
         holder.attended_lectures.setText(String.valueOf(model.getAttended_lectures()));
         holder.total_lectures.setText(String.valueOf(model.getTotal_lectures()));
-        holder.percentage.setText(String.valueOf(model.getPercentage()));
+        holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                CustomDialog1 c=new CustomDialog1();
+                FragmentTransaction ft=((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction();
+                c.show(ft,"Example");
+                return true;
+            }
+        });
     }
 
     @NonNull
@@ -53,12 +64,10 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
             attended_lectures = itemView.findViewById(R.id.attended_lectures);
             total_lectures = itemView.findViewById(R.id.total_lectures);
             percentage = itemView.findViewById(R.id.total_percentage);
-
-
-
                 }
 
-        }
+
+    }
     }
 
 
