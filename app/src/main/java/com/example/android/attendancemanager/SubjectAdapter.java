@@ -28,15 +28,6 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
         holder.attended_lectures.setText(String.valueOf(model.getAttended_lectures()));
         holder.total_lectures.setText(String.valueOf(model.getTotal_lectures()));
         holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                CustomDialog1 c=new CustomDialog1();
-                FragmentTransaction ft=((AppCompatActivity)v.getContext()).getSupportFragmentManager().beginTransaction();
-                c.show(ft,"Example");
-                return true;
-            }
-        });
     }
 
     @NonNull
