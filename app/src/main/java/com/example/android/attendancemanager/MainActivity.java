@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db ;
+    private FirebaseUser currentUser;
     RecyclerView recyclerView;
     final Context context=this;
     private MainAdapter adapter;
@@ -48,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        sentToLogin();
-        setupRecyclerView();
+
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -81,27 +82,33 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        //sentToLogin();
+        currentUser = mAuth.getCurrentUser();
+        if(currentUser==null || !currentUser.isEmailVerified())
+            sentToLogin();
+        else
+            setupRecyclerView();
     }
 
     private void setupRecyclerView() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         String stringDate = sdf.format(new Date());
-            cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
+        cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
 
 
-            Query query = cr.orderBy("name", Query.Direction.ASCENDING);
-            FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
+        Query query = cr.orderBy("name", Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
 
-            adapter = new MainAdapter(options);
-            recyclerView = findViewById(R.id.rec_view);
-            recyclerView.setHasFixedSize(true);
+        adapter = new MainAdapter(options);
+        recyclerView = findViewById(R.id.rec_view);
+        recyclerView.setHasFixedSize(true);
 
-            ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-            adapter.setHasStableIds(true);
-            recyclerView.setAdapter(adapter);
+        adapter.setHasStableIds(true);
+        recyclerView.setAdapter(adapter);
         /*catch (Exception e)
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
@@ -124,13 +131,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
-
         sentToLogin();
+        adapter.startListening();
     }
 
     private void sentToLogin() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+
 
         if(currentUser==null ) {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -158,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.show();
         }
+
 
     }
 
@@ -190,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout() {
         mAuth.signOut();
-        sentToLogin();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+        //finish();
     }
 }
