@@ -28,7 +28,6 @@ public class NewDaySubjectActivity extends AppCompatActivity {
     private List subjectList;
     private Button saveButton;
     private CollectionReference cr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +39,8 @@ public class NewDaySubjectActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.save_subject_button);
         Bundle extras = getIntent().getExtras();
         final String newString = extras.getString("dayName");
-
+        String p="Choose Subject..";
+        subjectList.add(p);
         db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -51,7 +51,7 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                         subjectList.add(subject);
 
                     }
-                    ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(NewDaySubjectActivity.this, android.R.layout.simple_spinner_item, subjectList);
+                    ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(NewDaySubjectActivity.this, R.layout.spinner_item, subjectList);
                     subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(subjectsAdapter);
                 }
@@ -69,40 +69,40 @@ public class NewDaySubjectActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String name = null;
-                if(spinner==null || spinner.getSelectedItem() == null)
-                {
+                if (spinner == null || spinner.getSelectedItem() == null) {
                     Toast.makeText(NewDaySubjectActivity.this, "select subject", Toast.LENGTH_LONG).show();
                     return;
                 }
                 name = spinner.getSelectedItem().toString();
                 final String text = name;
-
+                if (text.equals("Choose Subject..")) {
+                    Toast.makeText(view.getContext(), "Please select valid subject", Toast.LENGTH_SHORT).show();
+                }
+                else{
                 db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful())
-                        {
-                            for(DocumentSnapshot document: task.getResult())
-                            {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
                                 subject = document.getString("name");
-                                if(subject.equals(text))
-                                {
-                                    attended_lectures = (int)(long)document.get("attended_lectures");
-                                    total_lectures = (int)(long)document.get("total_lectures");
-                                    percentage = (float)(double)document.get("percentage");
+                                if (subject.equals(text)) {
+                                    attended_lectures = (int) (long) document.get("attended_lectures");
+                                    total_lectures = (int) (long) document.get("total_lectures");
+                                    percentage = (float) (double) document.get("percentage");
                                     break;
 
 
                                 }
                             }
                             cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
-                            cr.add(new Subject(subject,attended_lectures,total_lectures,percentage));
+                            cr.add(new Subject(subject, attended_lectures, total_lectures, percentage));
                             Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
                             finish();
                         }
                     }
                 });
+            }
             }
         });
 
