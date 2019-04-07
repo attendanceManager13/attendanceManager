@@ -9,6 +9,7 @@
     <string name="time_table">Time Table</string>
     <string name="title_activity_subjects">SubjectsActivity</string>
     <string name="progstatus">%1$d%</string>
+    <string name="set_attendance_criteria">Set Attendance Criteria</string>
     <string-array name="countries_array">
         <item>Bahrain</item>
         <item>Bangladesh</item>

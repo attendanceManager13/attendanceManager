@@ -3,7 +3,7 @@ package com.example.android.attendancemanager;
 public class MainModel {
     //private long priority;
     private int progress=45;
-    private String name,status="50",plus="+",minus="-",progtext="on track";
+    private String name,status="on track",plus="P",minus="A",progtext="50";
     public MainModel(){}
     public MainModel( String name) {
         //this.priority = priority;
