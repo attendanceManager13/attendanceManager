@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         Query query = cr.orderBy("name", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
 
-        adapter = new MainAdapter(options);
+        adapter = new MainAdapter(options,this);
         recyclerView = findViewById(R.id.rec_view);
         recyclerView.setHasFixedSize(true);
 
