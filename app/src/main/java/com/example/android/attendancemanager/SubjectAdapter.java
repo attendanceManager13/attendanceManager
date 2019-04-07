@@ -37,9 +37,13 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
         return new SubjectHolder(v);
     }
 
-    public void deleteItem(int position)
+    public String deleteItem(int position)
     {
+        Subject holder = getItem(position);
+        String name = holder.getName();
+
         getSnapshots().getSnapshot(position).getReference().delete();
+        return name;
     }
 
     class SubjectHolder extends RecyclerView.ViewHolder{

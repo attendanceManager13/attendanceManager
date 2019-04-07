@@ -71,6 +71,7 @@ public class DayActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
+
         Query query = cr.orderBy("name",Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Subject> options = new FirestoreRecyclerOptions.Builder<Subject>().setQuery(query,Subject.class).build();
 

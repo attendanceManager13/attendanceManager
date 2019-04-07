@@ -17,12 +17,17 @@ import android.view.View;
 
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class AddSubjectsActivity extends AppCompatActivity {
     public static interface ClickListener{
@@ -77,6 +82,7 @@ public class AddSubjectsActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference cr = db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
     private SubjectAdapter adapter;
+    private DocumentReference timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +118,24 @@ public class AddSubjectsActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
+                String[] days = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+                String name = adapter.deleteItem(viewHolder.getAdapterPosition());
+                for(final String day:days) {
+                    timeTableData.collection(day).whereEqualTo("name",name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful())
+                            {
+                                for(DocumentSnapshot document: task.getResult())
+                                {
+                                    String id = document.getId();
+                                    timeTableData.collection(day).document(id).delete();
+
+                                }
+                            }
+                        }
+                    });
+                }
 
             }
         }).attachToRecyclerView(recyclerView);

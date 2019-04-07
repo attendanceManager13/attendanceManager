@@ -69,11 +69,13 @@ public class NewSubjectActivity extends AppCompatActivity {
             dayName = extras.getString("dayName");
             cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(dayName);
         }
-
-
-
-        float percentage = (Float.parseFloat(attended)/Float.parseFloat(total))*100;
-        percentage = Float.valueOf(new DecimalFormat("#.##").format(percentage));
+        float percentage;
+        if(Integer.valueOf(total)==0)
+            percentage = 0;
+        else {
+            percentage = (Float.parseFloat(attended) / Float.parseFloat(total)) * 100;
+            percentage = Float.valueOf(new DecimalFormat("#.##").format(percentage));
+        }
         cr.add(new Subject(subject,Integer.valueOf(attended),Integer.valueOf(total),percentage));
         Toast.makeText(NewSubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
         finish();

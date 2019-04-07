@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        adapter.setHasStableIds(true);
+        //adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         /*catch (Exception e)
         {
