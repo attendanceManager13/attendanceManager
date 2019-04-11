@@ -90,7 +90,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
             @Override
             public void onClick(View view) {
                 sharedPreferencesEdit(position, editor, mainViewHolder);
-                //buttonsDisabled(mainViewHolder);
+
                 setFlag(3,editor1, position);
             }
         });
