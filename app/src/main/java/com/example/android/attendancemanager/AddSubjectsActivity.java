@@ -2,6 +2,7 @@ package com.example.android.attendancemanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -136,6 +137,10 @@ public class AddSubjectsActivity extends AppCompatActivity {
                         }
                     });
                 }
+                SharedPreferences sharedPreferences = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
 
             }
         }).attachToRecyclerView(recyclerView);

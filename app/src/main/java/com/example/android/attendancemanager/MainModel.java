@@ -3,7 +3,8 @@ package com.example.android.attendancemanager;
 public class MainModel {
     //private long priority;
     private int progress=45;
-    private String name,status="on track",plus="P",minus="A",progtext="50";
+    private String name,status="on track",plus="P",minus="A",progtext="50",cancel="CANCEL",undo = "UNDO";
+
     public MainModel(){}
     public MainModel( String name) {
         //this.priority = priority;
@@ -30,4 +31,6 @@ public class MainModel {
         return minus;
     }
     String getProgtext(){ return progtext; }
+    String getCancel(){return cancel;}
+    String getUndo(){return undo;}
 }

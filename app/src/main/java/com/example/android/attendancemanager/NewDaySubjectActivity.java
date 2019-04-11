@@ -96,7 +96,7 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                                 }
                             }
                             cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
-                            cr.add(new Subject(subject, attended_lectures, total_lectures, percentage));
+                            cr.add(new Subject2(subject, attended_lectures, total_lectures, percentage,"NO"));
                             Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
                             finish();
                         }

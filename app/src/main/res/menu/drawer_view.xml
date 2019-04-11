@@ -22,6 +22,10 @@
                     android:id="@+id/nav_notifications"
 
                     android:title="@string/notifications" />
+                <item
+                        android:id="@+id/nav_history"
+
+                        android:title="History"/>
 
         </group>
 </menu>

@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NewDaySubjectActivity"></activity>
-        <activity android:name=".DayActivity"></activity>
+        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".NewDaySubjectActivity" />
+        <activity android:name=".DayActivity" />
         <activity
             android:name=".NewSubjectActivity"
             android:parentActivityName=".AddSubjectsActivity"
