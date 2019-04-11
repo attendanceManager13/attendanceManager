@@ -1,9 +1,16 @@
 package com.example.android.attendancemanager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -11,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -30,7 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
     private int attended_lectures;
     private int total_lectures;
     private float percentage;
-
+    private HistoryAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +62,10 @@ public class HistoryActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         Date oldDate = cal.getTime();
-        String previousDate = dateFormat.format(oldDate);
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd",Locale.ENGLISH);
+        String previousDate = sdf.format(oldDate);
         cr = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection(previousDate);
-
+        setUpRecyclerView();
         cr.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -67,7 +75,17 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
     }
+    private void setUpRecyclerView() {
+        Query query = cr.orderBy("name",Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<History> options = new FirestoreRecyclerOptions.Builder<History>().setQuery(query,History.class).build();
 
+        adapter = new HistoryAdapter(options);
+
+        RecyclerView recyclerView = findViewById(R.id.recycle_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
     private void updateHistory(final CollectionReference cr, String previousDay) {
 
             db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(previousDay).whereEqualTo("marked","NO")

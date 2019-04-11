@@ -60,8 +60,6 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
             total_lectures = itemView.findViewById(R.id.total_lectures);
             percentage = itemView.findViewById(R.id.total_percentage);
                 }
-
-
     }
     }
 

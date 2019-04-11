@@ -6,8 +6,6 @@ public class Subject2 {
     private int attended_lectures;
     private int total_lectures;
     private float percentage;
-
-    public Subject2(){}
     public Subject2(String subject,int attended_lectures,int total_lectures,float percentage,String marked) {
         this.name = subject;
         this.marked = marked;

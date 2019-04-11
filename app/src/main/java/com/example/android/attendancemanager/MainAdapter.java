@@ -124,9 +124,9 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
         mainViewHolder.b2.setEnabled(true);
         mainViewHolder.b1.setEnabled(true);
         mainViewHolder.b3.setEnabled(true);
-        mainViewHolder.b1.setBackgroundColor(Color.GREEN);
+        mainViewHolder.b1.setBackgroundColor(Color.parseColor("#00aa00"));
         mainViewHolder.b2.setBackgroundColor(Color.RED);
-        mainViewHolder.b3.setBackgroundColor(Color.GREEN);
+        mainViewHolder.b3.setBackgroundColor(Color.parseColor("#d23456"));
     }
 
     private void undoCancel(int position, SharedPreferences.Editor editor, SharedPreferences.Editor editor1, MainViewHolder mainViewHolder, int flag) {
