@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -24,13 +25,15 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
     @Override
     protected void onBindViewHolder(@NonNull HistoryHolder holder, int position, @NonNull History model) {
         holder.date.setText(model.getDate());
+        holder.cancel.setText("cancel");
+        holder.done.setText("done");
     }
 
     @NonNull
     @Override
-    public HistoryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public HistoryAdapter.HistoryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.history_card,viewGroup,false);
-        return new HistoryHolder(v);
+        return new HistoryAdapter.HistoryHolder(v);
     }
 
     public String deleteItem(int position)
@@ -44,9 +47,13 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
 
     class HistoryHolder extends RecyclerView.ViewHolder{
         TextView date;
+        Button cancel;
+        Button done;
         public HistoryHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.date);
+            done = itemView.findViewById(R.id.done_button);
+            cancel = itemView.findViewById(R.id.cancel_button);
         }
 
 

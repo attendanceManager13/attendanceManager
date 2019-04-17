@@ -23,9 +23,11 @@ import java.util.List;
 
 public class NewDaySubjectActivity extends AppCompatActivity {
     private Spinner spinner;
+    private Spinner spinner2;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     private List subjectList;
+    private List priorityList;
     private Button saveButton;
     private CollectionReference cr;
     @Override
@@ -33,9 +35,13 @@ public class NewDaySubjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_day_subject);
         spinner = findViewById(R.id.spinner);
+        spinner2 = findViewById(R.id.priority_spinner);
         db=FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         subjectList = new ArrayList();
+        priorityList = new ArrayList();
+        for(int i =0; i<=10; i++)
+            priorityList.add(i);
         saveButton = findViewById(R.id.save_subject_button);
         Bundle extras = getIntent().getExtras();
         final String newString = extras.getString("dayName");
@@ -54,6 +60,9 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                     ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(NewDaySubjectActivity.this, R.layout.spinner_item, subjectList);
                     subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(subjectsAdapter);
+                    ArrayAdapter<Integer> priorityAdapter = new ArrayAdapter<>(NewDaySubjectActivity.this,R.layout.spinner_item, priorityList);
+                    priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner2.setAdapter(priorityAdapter);
                 }
                 else
                     finish();
@@ -62,24 +71,31 @@ public class NewDaySubjectActivity extends AppCompatActivity {
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
             String subject;
-            int attended_lectures;
-            int total_lectures;
-            float percentage;
+
             @Override
             public void onClick(View view) {
 
-                String name = null;
+                String name;
+                int number;
                 if (spinner == null || spinner.getSelectedItem() == null) {
                     Toast.makeText(NewDaySubjectActivity.this, "select subject", Toast.LENGTH_LONG).show();
                     return;
                 }
+                else if(spinner2 == null || spinner2.getSelectedItem() == null)
+                {
+                    Toast.makeText(NewDaySubjectActivity.this, "select Lecture no.",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 name = spinner.getSelectedItem().toString();
                 final String text = name;
+                number = (int) spinner2.getSelectedItem();
                 if (text.equals("Choose Subject..")) {
                     Toast.makeText(view.getContext(), "Please select valid subject", Toast.LENGTH_SHORT).show();
                 }
+                else if(number == 0)
+                    Toast.makeText(view.getContext(), "Please select valid lecture no.", Toast.LENGTH_SHORT).show();
                 else{
-                db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
+                /*db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -95,13 +111,16 @@ public class NewDaySubjectActivity extends AppCompatActivity {
 
                                 }
                             }
-                            cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
-                            cr.add(new Subject2(subject, attended_lectures, total_lectures, percentage,"NO"));
-                            Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
-                            finish();
+
                         }
                     }
-                });
+                });*/
+
+                cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
+                    cr.add(new Subject2(text, "NO",number));
+
+                    Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
+                    finish();
             }
             }
         });

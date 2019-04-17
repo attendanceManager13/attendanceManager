@@ -3,6 +3,8 @@ package com.example.android.attendancemanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,8 +27,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -92,8 +96,24 @@ public class MainActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         if(currentUser==null || !currentUser.isEmailVerified())
             sentToLogin();
-        else
-            setupRecyclerView();
+
+        setupRecyclerView();
+        //setupSharedPreferences();
+    }
+
+    private void setupSharedPreferences() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date oldDate = cal.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String  previousDate = dateFormat.format(oldDate);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            context.deleteSharedPreferences(previousDate);
+        }
+
+        SharedPreferences sharedPreferences1 = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
+
     }
 
     private void setupRecyclerView() {

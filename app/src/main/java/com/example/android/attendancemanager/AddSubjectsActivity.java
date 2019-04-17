@@ -137,11 +137,11 @@ public class AddSubjectsActivity extends AppCompatActivity {
                         }
                     });
                 }
-                SharedPreferences sharedPreferences = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
+                /*SharedPreferences sharedPreferences = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
-
+*/
             }
         }).attachToRecyclerView(recyclerView);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,

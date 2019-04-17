@@ -26,14 +26,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.MainViewHolder> {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private CollectionReference subjectData = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");;
     private DocumentReference timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
-    private String[] days = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+
     private Context context ;
 
 
@@ -54,26 +57,26 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
         mainViewHolder.b4.setText(model.getUndo());
         final String subjectName = mainViewHolder.textView1.getText().toString().trim();
 
-        SharedPreferences sharedPreferences1 = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences1.edit();
-        final SharedPreferences sharedPreferences2 = context.getSharedPreferences("flagValue", Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor1 = sharedPreferences2.edit();
 
+        String dateStringNow = DateFormat.format("dd-MM-yyyy", new Date((new Date()).getTime())).toString();
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(dateStringNow, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor1 = sharedPreferences.edit();
 
-        String savedDateTime = sharedPreferences1.getString(String.valueOf(position), "");
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
 
-        String dateStringNow = DateFormat.format("MM/dd/yyyy", new Date((new Date()).getTime())).toString();
-        if(savedDateTime.equals(dateStringNow))
+        final String day = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+
+        if(sharedPreferences.getInt(String.valueOf(position),0)!=0)
             buttonsDisabled(mainViewHolder);
-        else
-            buttonsEnabled(mainViewHolder);
 
         mainViewHolder.b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presentSubject(subjectName);
-                presentDay(subjectName);
-                sharedPreferencesEdit(position,editor, mainViewHolder);
+                markDay(position,day);
+                buttonsDisabled(mainViewHolder);
+
                 setFlag(1,editor1,position);
             }
         });
@@ -81,43 +84,69 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
             @Override
             public void onClick(View view) {
                 absentSubject(subjectName);
-                absentDay(subjectName);
-                sharedPreferencesEdit(position, editor, mainViewHolder);
+                markDay(position,day);
+                buttonsDisabled(mainViewHolder);
+
                 setFlag(2,editor1, position);
             }
         });
         mainViewHolder.b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedPreferencesEdit(position, editor, mainViewHolder);
 
+                markDay(position,day);
+                buttonsDisabled(mainViewHolder);
                 setFlag(3,editor1, position);
             }
         });
         mainViewHolder.b4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int flag = sharedPreferences2.getInt(String.valueOf(position),0);
+                int flag = sharedPreferences.getInt(String.valueOf(position),0);
                 switch(flag){
                     case 1: undoPresent(subjectName);
-                            undoCancel(position,editor, editor1, mainViewHolder,flag);
-
+                            unmarkDay(position,day,mainViewHolder,editor1);
                             break;
                     case 2: undoAbsent(subjectName);
-                            undoCancel(position, editor,editor1, mainViewHolder, flag);
-
+                            unmarkDay(position,day, mainViewHolder, editor1);
                             break;
-                    case 3: undoCancel(position, editor, editor1, mainViewHolder, flag);
-
+                    case 3: unmarkDay(position,day, mainViewHolder, editor1);
                             break;
                     default:
-
                 }
 
             }
         });
 
 
+    }
+
+    private void unmarkDay(int position, final String day, MainViewHolder mainViewHolder, SharedPreferences.Editor editor1) {
+        timeTableData.collection(day).whereEqualTo("lecture",position).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(DocumentSnapshot snapshot: task.getResult())
+                        timeTableData.collection(day).document(snapshot.getId()).update("marked","NO");
+                }
+            }
+        });
+        buttonsEnabled(mainViewHolder);
+        setFlag(0,editor1,position);
+    }
+
+    private void markDay(int position, final String day) {
+        timeTableData.collection(day).whereEqualTo("lecture",position).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(DocumentSnapshot snapshot: task.getResult())
+                        timeTableData.collection(day).document(snapshot.getId()).update("marked","YES");
+                }
+            }
+        });
     }
 
     private void buttonsEnabled(MainViewHolder mainViewHolder) {
@@ -129,16 +158,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
         mainViewHolder.b3.setBackgroundColor(Color.parseColor("#d23456"));
     }
 
-    private void undoCancel(int position, SharedPreferences.Editor editor, SharedPreferences.Editor editor1, MainViewHolder mainViewHolder, int flag) {
-        editor.putString(String.valueOf(position),"");
-        editor.apply();
 
-        buttonsEnabled(mainViewHolder);
-
-        setFlag(0,editor1, position);
-
-
-    }
     private void setFlag(int flag, SharedPreferences.Editor editor1, int position)
     {
         editor1.putInt(String.valueOf(position),flag);
@@ -161,23 +181,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
                 }
             }
         });
-        for(final String day:days)
-        {
-            timeTableData.collection(day).whereEqualTo("name",subjectName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful())
-                    {
-                        for(DocumentSnapshot document: task.getResult())
-                        {
-                            String[] need = getDataAfterUndoAbsent(document);
-                            updateDay(Integer.valueOf(need[0]),Integer.valueOf(need[1]),Float.valueOf(need[2]),document.getId(),day, "NO");
 
-                        }
-                    }
-                }
-            });
-        }
 
     }
 
@@ -187,8 +191,11 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
 
         total-=1;
         float percentage;
-        if(total == 0 || attended == 0)
+        if(total <= 0) {
             percentage = 0;
+            total = 0;
+        }
+
         else {
             percentage = ((float) attended / (float) total) * 100;
             percentage = Float.valueOf(new DecimalFormat("#.##").format(percentage));
@@ -213,25 +220,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
                 }
             }
         });
-        for(final String day:days)
-        {
-            timeTableData.collection(day).whereEqualTo("name",subjectName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful())
-                    {
-                        for(DocumentSnapshot document: task.getResult())
-                        {
-                            String[] need = getDataAfterUndoPresent(document);
-                            updateDay(Integer.valueOf(need[0]),Integer.valueOf(need[1]),Float.valueOf(need[2]),document.getId(),day,"NO");
 
-                        }
-                    }
-                }
-
-
-            });
-        }
     }
     private String[] getDataAfterUndoPresent(DocumentSnapshot document) {
         int attended = (int) (long) document.get("attended_lectures");
@@ -249,16 +238,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
         return need;
     }
 
-    private void sharedPreferencesEdit(int position, SharedPreferences.Editor editor, MainViewHolder mainViewHolder) {
-        String dateString = DateFormat.format("MM/dd/yyyy", new Date((new Date()).getTime())).toString();
 
-        editor.putString(String.valueOf(position), dateString);
-        editor.apply();
-        buttonsDisabled(mainViewHolder);
-
-
-
-    }
 
     private void buttonsDisabled(MainViewHolder mainViewHolder) {
         mainViewHolder.b2.setEnabled(false);
@@ -285,25 +265,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
             }
         });
     }
-    private void absentDay(String subjectName) {
-        for(final String day:days)
-        {
-            timeTableData.collection(day).whereEqualTo("name",subjectName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful())
-                    {
-                        for(DocumentSnapshot document: task.getResult())
-                        {
-                            String[] need = absent(document);
-                            updateDay(Integer.valueOf(need[0]),Integer.valueOf(need[1]),Float.valueOf(need[2]),document.getId(),day, "YES");
-                        }
-                    }
-                }
-            });
-        }
 
-    }
     private String[] absent(DocumentSnapshot document)
     {
         int attended = (int) (long) document.get("attended_lectures");
@@ -316,24 +278,7 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
 
     }
 
-    private void presentDay(String subjectName) {
-        for(final String day:days)
-        {
-            timeTableData.collection(day).whereEqualTo("name",subjectName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful())
-                    {
-                        for(DocumentSnapshot document: task.getResult())
-                        {
-                            String[] need = present(document);
-                            updateDay(Integer.valueOf(need[0]),Integer.valueOf(need[1]),Float.valueOf(need[2]),document.getId(),day, "YES");
-                        }
-                    }
-                }
-            });
-        }
-    }
+
 
     private void presentSubject(final String name) {
         subjectData.whereEqualTo("name",name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -348,6 +293,8 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
 
             }
         });
+
+
     }
 
     private String[] present(DocumentSnapshot document) {
@@ -371,14 +318,6 @@ public class MainAdapter extends FirestoreRecyclerAdapter<MainModel,MainAdapter.
         );
         notifyDataSetChanged();
 
-    }
-    private void updateDay(int attended, int total, float percentage, String id, String day, String mark) {
-
-        timeTableData.collection(day).document(id).update("attended_lectures",attended,
-                "total_lectures",total,
-                "percentage",percentage,
-        "marked",mark);
-        notifyDataSetChanged();
     }
 
     @NonNull

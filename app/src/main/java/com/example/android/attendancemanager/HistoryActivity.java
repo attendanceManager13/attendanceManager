@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -38,6 +39,8 @@ public class HistoryActivity extends AppCompatActivity {
     private int attended_lectures;
     private int total_lectures;
     private float percentage;
+    private int lecture;
+    private String date;
     private HistoryAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +65,24 @@ public class HistoryActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         Date oldDate = cal.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd",Locale.ENGLISH);
-        String previousDate = sdf.format(oldDate);
-        cr = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection(previousDate);
+
+        String previousDate = dateFormat.format(oldDate);
+        cr = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data");
+        updateHistory(cr,previousDay,previousDate);
         setUpRecyclerView();
-        cr.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        /*cr.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty())
                     updateHistory(cr,previousDay);
             }
-        });
+        });*/
 
     }
     private void setUpRecyclerView() {
-        Query query = cr.orderBy("name",Query.Direction.ASCENDING);
+
+        Query query = cr.orderBy("lecture", Query.Direction.ASCENDING);
+
         FirestoreRecyclerOptions<History> options = new FirestoreRecyclerOptions.Builder<History>().setQuery(query,History.class).build();
 
         adapter = new HistoryAdapter(options);
@@ -86,7 +92,7 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
-    private void updateHistory(final CollectionReference cr, String previousDay) {
+    private void updateHistory(final CollectionReference cr, final String previousDay, final String previousDate) {
 
             db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(previousDay).whereEqualTo("marked","NO")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -97,15 +103,32 @@ public class HistoryActivity extends AppCompatActivity {
                         for(DocumentSnapshot document: task.getResult())
                         {
                             subject = document.getString("name");
-                            attended_lectures = (int) (long) document.get("attended_lectures");
+                            /*attended_lectures = (int) (long) document.get("attended_lectures");
                             total_lectures = (int) (long) document.get("total_lectures");
-                            percentage = (float) (double) document.get("percentage");
+                            percentage = (float) (double) document.get("percentage");*/
+                            lecture = (int)document.get("lecture");
+                            date = previousDate;
 
-                            cr.add(new Subject2(subject,attended_lectures,total_lectures,percentage,"NO"));
+                            cr.add(new History(subject,lecture,date,"NO"));
+
+
                         }
                     }
                 }
             });
+        /*db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(previousDay).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(previousDay).document(document.getId())
+                                .update("marked","NO");
+                    }
+                }
+            }
+        });*/
 
         }
         private String previousDay(Date dateFormat) {
@@ -113,5 +136,16 @@ public class HistoryActivity extends AppCompatActivity {
         cal.setTime(dateFormat);
         cal.add(Calendar.DAY_OF_MONTH, -1);
         return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(cal.getTime());
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

@@ -2,16 +2,20 @@ package com.example.android.attendancemanager;
 
 public class Subject2 {
     private String name,marked;
-    //private int priority;
-    private int attended_lectures;
+    private int lecture;
+    /*private int attended_lectures;
     private int total_lectures;
+    private float percentage;*/
     private float percentage;
-    public Subject2(String subject,int attended_lectures,int total_lectures,float percentage,String marked) {
+    public Subject2(){}
+    public Subject2(String subject,String marked,int lecture) {
         this.name = subject;
         this.marked = marked;
-        this.attended_lectures = attended_lectures;
+        this.lecture = lecture;
+        //this.percentage = percentage;
+        /*this.attended_lectures = attended_lectures;
         this.total_lectures = total_lectures;
-        this.percentage =percentage;
+        this.percentage =percentage;*/
 
     }
 
@@ -26,7 +30,7 @@ public class Subject2 {
     //return this.priority;
     //}
 
-    public int getAttended_lectures() {
+    /*public int getAttended_lectures() {
         return attended_lectures;
     }
 
@@ -36,7 +40,12 @@ public class Subject2 {
 
     public int getTotal_lectures() {
         return total_lectures;
+    }*/
+    public float getPercentage() {
+        return percentage;
     }
 
     public String getMarked(){return marked; }
+
+    public int getLecture(){return lecture;}
 }
