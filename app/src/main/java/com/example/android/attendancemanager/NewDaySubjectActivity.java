@@ -40,12 +40,13 @@ public class NewDaySubjectActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         subjectList = new ArrayList();
         priorityList = new ArrayList();
+        priorityList.add("Choose Lecture");
         for(int i =0; i<=10; i++)
             priorityList.add(i);
         saveButton = findViewById(R.id.save_subject_button);
         Bundle extras = getIntent().getExtras();
         final String newString = extras.getString("dayName");
-        String p="Choose Subject..";
+        String p="Choose Subject";
         subjectList.add(p);
         db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
