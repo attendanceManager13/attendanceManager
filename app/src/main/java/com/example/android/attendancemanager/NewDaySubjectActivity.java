@@ -40,7 +40,7 @@ public class NewDaySubjectActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         subjectList = new ArrayList();
         priorityList = new ArrayList();
-        priorityList.add("Choose Lecture");
+        //priorityList.add(0);
         for(int i =0; i<=10; i++)
             priorityList.add(i);
         saveButton = findViewById(R.id.save_subject_button);
@@ -90,7 +90,7 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                 name = spinner.getSelectedItem().toString();
                 final String text = name;
                 number = (int) spinner2.getSelectedItem();
-                if (text.equals("Choose Subject..")) {
+                if (text.equals("Choose Subject")) {
                     Toast.makeText(view.getContext(), "Please select valid subject", Toast.LENGTH_SHORT).show();
                 }
                 else if(number == 0)

@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
         cal.add(Calendar.DATE, -1);
         Date oldDate = cal.getTime();
         final String previousDate = dateFormat.format(oldDate);
+        cal.add(Calendar.DATE,-2);
+        Date olderDate = cal.getTime();
+        String twoDayBeforeDate = dateFormat.format(olderDate);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -125,8 +128,13 @@ public class MainActivity extends AppCompatActivity {
             sentToLogin();
 
         setupRecyclerView();
-        checkHistory(previousDate,previousDay);
-        //setupSharedPreferences();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("history",Context.MODE_PRIVATE);
+        if(sharedPreferences.getInt(previousDate,0)!=1)
+            checkHistory(previousDate,previousDay);
+        if(sharedPreferences.getInt(twoDayBeforeDate,0)==1)
+            sharedPreferences.edit().remove(twoDayBeforeDate).apply();
+
     }
 
     private void checkHistory(final String previousDate, final String previousDay) {

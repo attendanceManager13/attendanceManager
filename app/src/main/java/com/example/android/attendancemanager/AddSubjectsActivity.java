@@ -137,11 +137,20 @@ public class AddSubjectsActivity extends AppCompatActivity {
                         }
                     });
                 }
-                /*SharedPreferences sharedPreferences = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-*/
+                db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data")
+                        .whereEqualTo("name",name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            for(DocumentSnapshot snapshot: task.getResult())
+                            {
+                                db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data")
+                                        .document(snapshot.getId()).delete();
+                            }
+                        }
+                    }
+                });
             }
         }).attachToRecyclerView(recyclerView);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,

@@ -33,7 +33,7 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
 
 
 
-    private Context context;
+    private Context context ;
     public HistoryAdapter(@NonNull FirestoreRecyclerOptions<History> options, Context context) {
         super(options);
 
@@ -84,8 +84,13 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
                             }
                         }
                     });
+
                     SharedPreferences sharedPreferences1 = context.getSharedPreferences("previous"+model.getDate(),Context.MODE_PRIVATE);
                     sharedPreferences1.edit().clear().apply();
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("history",Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(model.getDate(),1);
+                    editor.apply();
                 }
             });
 
