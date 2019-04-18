@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,19 +21,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,9 +53,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     final Context context=this;
     private MainAdapter adapter;
-    List<MainModel> proList=new ArrayList<>();
-    List<DocumentSnapshot> subjects = new ArrayList<>();
-    CollectionReference cr;
+
+    private CollectionReference cr;
+    private CollectionReference cr1;
+    private CollectionReference cr2;
+    private DocumentReference timeTableData;
+    private String subject;
+    private int lecture;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +68,24 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        cr1 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data");
+        cr2 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("previous_date");
+        timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
 
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateFormat.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //get yesterday's DAYNAME
+        final String previousDay = previousDay(date);
+        //get yesterday's DATE
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date oldDate = cal.getTime();
+        final String previousDate = dateFormat.format(oldDate);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -98,23 +125,63 @@ public class MainActivity extends AppCompatActivity {
             sentToLogin();
 
         setupRecyclerView();
+        checkHistory(previousDate,previousDay);
         //setupSharedPreferences();
     }
 
-    private void setupSharedPreferences() {
-        final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        Date oldDate = cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        String  previousDate = dateFormat.format(oldDate);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    private void checkHistory(final String previousDate, final String previousDay) {
+        cr1.whereEqualTo("date",previousDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    if(task.getResult().isEmpty()) {
+                        updateHistory(previousDay, previousDate);
+                        unmarkDay(previousDay,previousDate);
+                    }
+                }
+            }
+        });
+    }
 
-            context.deleteSharedPreferences(previousDate);
-        }
-
-        SharedPreferences sharedPreferences1 = getSharedPreferences("MyApp",Context.MODE_PRIVATE);
+    private void unmarkDay(final String previousDay, String previousDate) {
+        timeTableData.collection(previousDay).whereEqualTo("marked","YES").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(DocumentSnapshot snapshot: task.getResult())
+                        timeTableData.collection(previousDay).document(snapshot.getId()).update("marked","NO");
+                }
+            }
+        });
+        SharedPreferences sharedPreferences = getSharedPreferences("today"+previousDate,Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
 
     }
+    private void updateHistory( final String previousDay, final String previousDate) {
+
+        timeTableData.collection(previousDay).whereEqualTo("marked", "NO")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    cr2.add(new History(previousDate));
+                    for (DocumentSnapshot document : task.getResult()) {
+                        subject = document.getString("name");
+                        lecture = Integer.parseInt(String.valueOf(document.get("lecture")));
+                        cr1.add(new History(subject, lecture, previousDate));
+                    }
+                }
+            }
+        });
+    }
+
+    private String previousDay(Date dateFormat) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateFormat);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(cal.getTime());}
 
     private void setupRecyclerView() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
@@ -122,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
 
 
-        Query query = cr.orderBy("name", Query.Direction.ASCENDING);
+        Query query = cr.orderBy("lecture", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
 
         adapter = new MainAdapter(options,this);
@@ -135,15 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
         //adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
-        /*catch (Exception e)
-        {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-            dialog.setTitle("alert");
-            dialog.setMessage("no record for today exists,got to time table activity for entering records");
-            dialog.setPositiveButton("OK",null);
-            dialog.show();
 
-        }*/
     }
 
 
