@@ -8,7 +8,16 @@
     android:padding="16dp"
     android:background="@drawable/bighead"
     tools:context=".NewSubjectActivity">
-    
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100sp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Enter details of subject"
+        android:textColor="@android:color/white"
+        android:textSize="24dp" />
     <EditText
         android:id="@+id/edit_text_subject"
         android:layout_width="match_parent"
@@ -17,6 +26,7 @@
         android:textColor="#fff"
         android:textColorHint="#dddddd"
         android:inputType="text"
+        android:layout_marginTop="100dp"
         />
     <EditText
         android:id="@+id/edit_text_attended_lectures"
@@ -42,8 +52,13 @@
     </NumberPicker>-->
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/save_button"
-        android:text="add"/>
+        android:text="add"
+        android:textColor="@android:color/white"
+        android:elevation="7dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/roundedbutton3"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

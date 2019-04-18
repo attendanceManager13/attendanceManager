@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -24,7 +25,7 @@ public class TimeTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_time_table);
         recyclerView =findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         proList.add(new Gmodel(1,"Monday"));
         proList.add(new Gmodel(2,"Tuesday"));
