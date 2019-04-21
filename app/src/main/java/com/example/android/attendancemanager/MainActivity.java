@@ -19,6 +19,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private DocumentReference timeTableData;
     private String subject;
     private int lecture;
+    private TextView todayday;
+    private TextView todaydate;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         cr1 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data");
         cr2 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("previous_date");
         timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
+        todaydate = findViewById(R.id.date_id);
+        todayday = findViewById(R.id.day_id);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date date = null;
@@ -79,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        todaydate.setText(dateFormat.format(new Date()));
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String stringDate = sdf.format(new Date());
+        todayday.setText(stringDate);
+
         //get yesterday's DAYNAME
         final String previousDay = previousDay(date);
         //get yesterday's DATE
@@ -122,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        //sentToLogin();
+
         currentUser = mAuth.getCurrentUser();
         if(currentUser==null || !currentUser.isEmailVerified())
             sentToLogin();
@@ -174,11 +185,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    cr2.add(new History(previousDate));
-                    for (DocumentSnapshot document : task.getResult()) {
-                        subject = document.getString("name");
-                        lecture = Integer.parseInt(String.valueOf(document.get("lecture")));
-                        cr1.add(new History(subject, lecture, previousDate));
+                    if(!task.getResult().isEmpty()) {
+                        cr2.add(new History(previousDate));
+                        for (DocumentSnapshot document : task.getResult()) {
+                            subject = document.getString("name");
+                            lecture = Integer.parseInt(String.valueOf(document.get("lecture")));
+                            cr1.add(new History(subject, lecture, previousDate));
+                        }
                     }
                 }
             }

@@ -40,10 +40,6 @@ public class HistoryAdapter extends FirestoreRecyclerAdapter<History, HistoryAda
         this.context = context;
 
     }
-
-
-
-
     //@Override
     protected void onBindViewHolder(@NonNull HistoryHolder holder, int position, @NonNull final History model) {
 
