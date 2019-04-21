@@ -28,6 +28,7 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
         holder.attended_lectures.setText(String.valueOf(model.getAttended_lectures()));
         holder.total_lectures.setText(String.valueOf(model.getTotal_lectures()));
         holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
+
     }
 
     @NonNull
@@ -41,25 +42,32 @@ public class SubjectAdapter extends FirestoreRecyclerAdapter<Subject, SubjectAda
     {
         Subject holder = getItem(position);
         String name = holder.getName();
-
         getSnapshots().getSnapshot(position).getReference().delete();
         return name;
     }
 
     class SubjectHolder extends RecyclerView.ViewHolder{
          TextView name;
-         //TextView priority;
          TextView attended_lectures;
          TextView total_lectures;
          TextView percentage;
         public SubjectHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.subject_name);
-            //priority = itemView.findViewById(R.id.subject_priority);
             attended_lectures = itemView.findViewById(R.id.attended_lectures);
             total_lectures = itemView.findViewById(R.id.total_lectures);
             percentage = itemView.findViewById(R.id.total_percentage);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(),EditSubjectActivity.class);
+                    intent.putExtra("name",name.getText().toString());
+                    intent.putExtra("attended",attended_lectures.getText().toString());
+                    intent.putExtra("total",total_lectures.getText().toString());
+                    view.getContext().startActivity(intent);
                 }
+            });
+        }
     }
     }
 

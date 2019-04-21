@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/bighead"
-    tools:context=".NewSubjectActivity">
+    tools:context=".EditSubjectActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,14 +15,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100sp"
         android:fontFamily="sans-serif-condensed-light"
-        android:text="Enter subject details"
+        android:text="Edit subject details"
         android:textColor="@android:color/white"
         android:textSize="24dp" />
     <EditText
         android:id="@+id/edit_text_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Subject"
+
         android:textColor="#fff"
         android:textColorHint="#dddddd"
         android:inputType="text"
@@ -32,7 +32,7 @@
         android:id="@+id/edit_text_attended_lectures"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Attended lectures"
+
         android:textColor="#fff"
         android:textColorHint="#dddddd"
         android:inputType="number"/>
@@ -40,7 +40,7 @@
         android:id="@+id/edit_text_total_lectures"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Total Lectures"
+
         android:textColor="#fff"
         android:textColorHint="#dddddd"
         android:inputType="number"/>
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:id="@+id/save_button"
-        android:text="add"
+        android:text="update"
         android:textColor="@android:color/white"
         android:elevation="7dp"
         android:layout_marginTop="20dp"
