@@ -12,10 +12,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -75,9 +75,9 @@ public class NewDaySubjectActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-
+                cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
                 String name;
-                int number;
+                final int number;
                 if (spinner == null || spinner.getSelectedItem() == null) {
                     Toast.makeText(NewDaySubjectActivity.this, "select subject", Toast.LENGTH_LONG).show();
                     return;
@@ -90,39 +90,46 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                 name = spinner.getSelectedItem().toString();
                 final String text = name;
                 number = (int) spinner2.getSelectedItem();
-                if (text.equals("Choose Subject")) {
-                    Toast.makeText(view.getContext(), "Please select valid subject", Toast.LENGTH_SHORT).show();
+
+                if (text.equals("Choose Subject") || number==0) {
+                    Toast.makeText(view.getContext(), "Please select valid subject and lecture", Toast.LENGTH_SHORT).show();
                 }
-                else if(number == 0)
-                    Toast.makeText(view.getContext(), "Please select valid lecture no.", Toast.LENGTH_SHORT).show();
                 else{
-                /*db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data")
-                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                subject = document.getString("name");
-                                if (subject.equals(text)) {
-                                    attended_lectures = (int) (long) document.get("attended_lectures");
-                                    total_lectures = (int) (long) document.get("total_lectures");
-                                    percentage = (float) (double) document.get("percentage");
-                                    break;
-
-
-                                }
-                            }
-
-                        }
-                    }
-                });*/
-
-                cr = FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(newString);
-                    cr.add(new Subject2(text, "NO",number));
-
-                    Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
-                    finish();
+                    addSubject(number,cr,text);
+                }
             }
+        });
+
+    }
+
+    private void addSubject(final int number, final CollectionReference cr, final String text) {
+
+        cr.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    int flag2=0;
+                    for(DocumentSnapshot snapshot: task.getResult())
+                    {
+                        if(Integer.parseInt(String.valueOf(snapshot.get("lecture")))==number)
+                        {
+                            flag2=1;
+                            break;
+                        }
+
+                    }
+                    if(flag2==1)
+                        Toast.makeText(NewDaySubjectActivity.this,"Lecture number already present",Toast.LENGTH_LONG).show();
+                    else
+                    {
+                        cr.add(new Subject2(text, "NO",number));
+
+                        Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+
             }
         });
 

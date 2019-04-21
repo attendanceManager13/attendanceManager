@@ -63,36 +63,7 @@ public class DayActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        final HashMap<String,Object> map = new HashMap<>();
 
-        cr2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    for(DocumentSnapshot documentSnapshot: task.getResult())
-                    {
-                        map.put(documentSnapshot.getString("name"),documentSnapshot.get("percentage"));
-                    }
-                }
-            }
-        });
-        if(map!=null) {
-            for (final Map.Entry<String, Object> entry : map.entrySet()) {
-
-                cr.whereEqualTo("name", entry.getKey()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                cr.document(documentSnapshot.getId()).update("percentage", entry.getValue());
-                            }
-                        }
-                    }
-                });
-            }
-        }
         Query query = cr.orderBy("lecture",Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Subject2> options = new FirestoreRecyclerOptions.Builder<Subject2>().setQuery(query,Subject2.class).build();
 

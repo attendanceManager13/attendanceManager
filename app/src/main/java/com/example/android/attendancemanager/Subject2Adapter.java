@@ -9,18 +9,36 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class Subject2Adapter extends FirestoreRecyclerAdapter<Subject2, Subject2Adapter.Subject2Holder> {
 
     public Subject2Adapter(@NonNull FirestoreRecyclerOptions<Subject2> options) {
         super(options);
     }
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    CollectionReference cr = db.collection(mAuth.getCurrentUser().getUid()).document("subjects").collection("subjects_data");
     @Override
-    protected void onBindViewHolder(@NonNull Subject2Adapter.Subject2Holder holder, int position, @NonNull Subject2 model) {
-
+    protected void onBindViewHolder(@NonNull final Subject2Adapter.Subject2Holder holder, int position, @NonNull final Subject2 model) {
+        cr.whereEqualTo("name",model.getName()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(DocumentSnapshot snapshot: task.getResult())
+                        holder.percentage.setText(String.valueOf(snapshot.get("percentage")));
+                }
+            }
+        });
         holder.name.setText(model.getName());
-        holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
+        //holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
     }
 
     @NonNull
