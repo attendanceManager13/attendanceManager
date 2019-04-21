@@ -24,6 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subject Name"
+            android:layout_marginTop="30sp"
+            android:layout_marginStart="5sp"
             android:textColor="@android:color/black"
             android:layout_alignParentStart="true"
             android:textSize="24sp" />

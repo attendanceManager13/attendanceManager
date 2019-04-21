@@ -133,9 +133,6 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.nav_time_table:
                                 startActivity(new Intent(MainActivity.this,TimeTableActivity.class));
                                 break;
-                            case R.id.nav_criteria:
-                                startActivity(new Intent(MainActivity.this,Criteria.class));
-                                break;
                             case R.id.nav_history:
                                 startActivity(new Intent(MainActivity.this,HistoryActivity.class));
                                 break;

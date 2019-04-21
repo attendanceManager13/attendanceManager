@@ -31,9 +31,6 @@
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Criteria"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />
         <activity

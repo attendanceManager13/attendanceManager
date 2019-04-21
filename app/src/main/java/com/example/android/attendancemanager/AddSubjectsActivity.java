@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,6 +92,11 @@ public class AddSubjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_subjects);
         FloatingActionButton fab = findViewById(R.id.button_add_subject);
+        final CoordinatorLayout coordinatorLayout=findViewById(R.id.cor1);
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Swipe to delete existing subjects", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

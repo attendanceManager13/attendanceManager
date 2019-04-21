@@ -2,7 +2,9 @@ package com.example.android.attendancemanager;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,7 +48,11 @@ public class DayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
         FloatingActionButton fab = findViewById(R.id.button_add_subject_day_activity);
+        final CoordinatorLayout coordinatorLayout=findViewById(R.id.cord1);
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Swipe to delete existing subjects", Snackbar.LENGTH_LONG);
 
+        snackbar.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
