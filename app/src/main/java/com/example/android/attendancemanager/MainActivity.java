@@ -70,14 +70,18 @@ public class MainActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        checkSignIn();
         //check authentication of current user
         currentUser = mAuth.getCurrentUser();
-        if(currentUser==null || !currentUser.isEmailVerified())
+        if(currentUser==null || !currentUser.isEmailVerified()) {
             sentToLogin();
-
-        cr1 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data");
-        cr2 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("previous_date");
-        timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
+            //finish();
+        }
+        if(currentUser!=null) {
+            cr1 = db.collection(currentUser.getUid()).document("history").collection("history_data");
+            cr2 = db.collection(currentUser.getUid()).document("history").collection("previous_date");
+            timeTableData = db.collection(currentUser.getUid()).document("time_table");
+        }
 
         drawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -146,20 +150,25 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
-        setupRecyclerView();
-        SharedPreferences sp = getSharedPreferences("dayOfAttendance",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(dateFormat.format(new Date()),1);
-        editor.apply();
-        if(sp.getInt(previousDate,0)==1) {
-            SharedPreferences sharedPreferences = getSharedPreferences("history", Context.MODE_PRIVATE);
-            //sharedPreferences.edit().clear().apply();
-            if (sharedPreferences.getInt(previousDate, 0) != 1)
-                checkHistory(previousDate, previousDay);
-            if (sharedPreferences.getInt(twoDayBeforeDate, 0) == 1)
-                sharedPreferences.edit().remove(twoDayBeforeDate).apply();
+        if(currentUser!=null) {
+            setupRecyclerView();
+            SharedPreferences sp = getSharedPreferences("dayOfAttendance", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt(dateFormat.format(new Date()), 1);
+            editor.apply();
+            if (sp.getInt(previousDate, 0) == 1) {
+                SharedPreferences sharedPreferences = getSharedPreferences("history", Context.MODE_PRIVATE);
+                //sharedPreferences.edit().clear().apply();
+                if (sharedPreferences.getInt(previousDate, 0) != 1)
+                    checkHistory(previousDate, previousDay);
+                if (sharedPreferences.getInt(twoDayBeforeDate, 0) == 1)
+                    sharedPreferences.edit().remove(twoDayBeforeDate).apply();
+            }
         }
+
+    }
+
+    private void checkSignIn() {
 
     }
 

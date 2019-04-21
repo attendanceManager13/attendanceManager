@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100sp"
         android:fontFamily="sans-serif-condensed-light"
-        android:text="Enter details of subject"
+        android:text="Enter subject details"
         android:textColor="@android:color/white"
         android:textSize="24dp" />
     <EditText
