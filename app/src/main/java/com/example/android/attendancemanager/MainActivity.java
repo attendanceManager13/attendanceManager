@@ -67,13 +67,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        drawerLayout = findViewById(R.id.drawer_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        //check authentication of current user
+        currentUser = mAuth.getCurrentUser();
+        if(currentUser==null || !currentUser.isEmailVerified())
+            sentToLogin();
+
         cr1 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("history_data");
         cr2 = db.collection(mAuth.getCurrentUser().getUid()).document("history").collection("previous_date");
         timeTableData =FirebaseFirestore.getInstance().collection(mAuth.getCurrentUser().getUid()).document("time_table");
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         todaydate = findViewById(R.id.date_id);
         todayday = findViewById(R.id.day_id);
 
@@ -97,9 +105,11 @@ public class MainActivity extends AppCompatActivity {
         cal.add(Calendar.DATE, -1);
         Date oldDate = cal.getTime();
         final String previousDate = dateFormat.format(oldDate);
+        //get two day's before DAYNAME
         cal.add(Calendar.DATE,-2);
         Date olderDate = cal.getTime();
         String twoDayBeforeDate = dateFormat.format(olderDate);
+
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -134,17 +144,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        currentUser = mAuth.getCurrentUser();
-        if(currentUser==null || !currentUser.isEmailVerified())
-            sentToLogin();
-
         setupRecyclerView();
-
-        SharedPreferences sharedPreferences = getSharedPreferences("history",Context.MODE_PRIVATE);
-        if(sharedPreferences.getInt(previousDate,0)!=1)
-            checkHistory(previousDate,previousDay);
-        if(sharedPreferences.getInt(twoDayBeforeDate,0)==1)
-            sharedPreferences.edit().remove(twoDayBeforeDate).apply();
+        SharedPreferences sp = getSharedPreferences("dayOfAttendance",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(dateFormat.format(new Date()),1);
+        editor.apply();
+        if(sp.getInt(previousDate,0)==1) {
+            SharedPreferences sharedPreferences = getSharedPreferences("history", Context.MODE_PRIVATE);
+            //sharedPreferences.edit().clear().apply();
+            if (sharedPreferences.getInt(previousDate, 0) != 1)
+                checkHistory(previousDate, previousDay);
+            if (sharedPreferences.getInt(twoDayBeforeDate, 0) == 1)
+                sharedPreferences.edit().remove(twoDayBeforeDate).apply();
+        }
 
     }
 
@@ -209,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
         String stringDate = sdf.format(new Date());
         cr = db.collection(mAuth.getCurrentUser().getUid()).document("time_table").collection(stringDate);
 
-
         Query query = cr.orderBy("lecture", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<MainModel> options = new FirestoreRecyclerOptions.Builder<MainModel>().setQuery(query, MainModel.class).build();
 
@@ -219,21 +230,13 @@ public class MainActivity extends AppCompatActivity {
 
         ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator())).setSupportsChangeAnimations(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        //adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
-
     }
-
-
-
     @Override
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -242,8 +245,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sentToLogin() {
-
-
         if(currentUser==null ) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -270,20 +271,14 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.show();
         }
-
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main_menu,menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch(item.getItemId()){
             case R.id.logout_btn:
                     logout();
@@ -291,21 +286,13 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
                 default:
                     return false;
-
         }
-
     }
-
-
-
     private void logout() {
         mAuth.signOut();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-
-        //finish();
     }
 }

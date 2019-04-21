@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
+
 public class Subject2Adapter extends FirestoreRecyclerAdapter<Subject2, Subject2Adapter.Subject2Holder> {
 
     public Subject2Adapter(@NonNull FirestoreRecyclerOptions<Subject2> options) {
@@ -32,13 +34,16 @@ public class Subject2Adapter extends FirestoreRecyclerAdapter<Subject2, Subject2
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful())
                 {
-                    for(DocumentSnapshot snapshot: task.getResult())
-                        holder.percentage.setText(String.valueOf(snapshot.get("percentage")));
+                    for(DocumentSnapshot snapshot: task.getResult()) {
+                        float percentage = Float.parseFloat(String.valueOf(snapshot.get("percentage")));
+                        String percentage1 = new DecimalFormat("#.##").format(percentage);
+                        holder.percentage.setText(percentage1+"%");
+                    }
                 }
             }
         });
         holder.name.setText(model.getName());
-        //holder.percentage.setText(String.valueOf(model.getPercentage())+"%");
+
     }
 
     @NonNull

@@ -123,7 +123,7 @@ public class NewDaySubjectActivity extends AppCompatActivity {
                         Toast.makeText(NewDaySubjectActivity.this,"Lecture number already present",Toast.LENGTH_LONG).show();
                     else
                     {
-                        cr.add(new Subject2(text, "NO",number));
+                        cr.add(new Subject2(text, "YES",number));
 
                         Toast.makeText(NewDaySubjectActivity.this, "subject added", Toast.LENGTH_LONG).show();
                         finish();
