@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PreviousDateActivity"></activity>
+        <activity android:name=".CurrentStatusActivity"></activity>
+        <activity android:name=".PreviousDateActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".NewDaySubjectActivity" />
         <activity android:name=".DayActivity" />

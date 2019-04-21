@@ -139,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.nav_history:
                                 startActivity(new Intent(MainActivity.this,HistoryActivity.class));
                                 break;
+                            case R.id.nav_current_staus:
+                                startActivity(new Intent(MainActivity.this,CurrentStatusActivity.class));
+
                         }
                         return true;
                     }

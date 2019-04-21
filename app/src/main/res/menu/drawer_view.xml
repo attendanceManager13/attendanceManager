@@ -5,10 +5,7 @@
                     android:id="@+id/nav_criteria"
 
                     android:title="@string/set_attendance_criteria" />
-                <item
-                    android:id="@+id/nav_home"
 
-                    android:title="@string/home" />
                 <item
                     android:id="@+id/nav_time_table"
 
@@ -19,13 +16,13 @@
                     android:title="@string/subjects" />
 
                 <item
-                    android:id="@+id/nav_notifications"
+                    android:id="@+id/nav_current_staus"
 
-                    android:title="@string/notifications" />
+                    android:title="Current Status" />
                 <item
                         android:id="@+id/nav_history"
 
-                        android:title="History"/>
+                        android:title="Missed Attendance"/>
 
         </group>
 </menu>
