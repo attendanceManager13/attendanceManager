@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bighead"
+    tools:context=".EditSubjectActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100sp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Edit subject details"
+        android:textColor="@android:color/white"
+        android:textSize="24dp" />
+    <EditText
+        android:id="@+id/edit_text_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
+        android:inputType="text"
+        android:layout_marginTop="100dp"
+        />
+    <EditText
+        android:id="@+id/edit_text_attended_lectures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/edit_text_total_lectures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="#fff"
+        android:textColorHint="#dddddd"
+        android:inputType="number"/>
+    <!--<NumberPicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/priority_number_picker">
+
+    </NumberPicker>-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/save_button"
+        android:text="add"
+        android:textColor="@android:color/white"
+        android:elevation="7dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/roundedbutton3"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

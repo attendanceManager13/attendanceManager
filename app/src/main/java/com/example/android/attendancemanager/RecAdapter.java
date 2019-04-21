@@ -60,6 +60,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewHolder> {
         RecViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1=itemView.findViewById(R.id.t1);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(),DayActivity.class);
+                    intent.putExtra("name",textView1.getText().toString());
+                    view.getContext().startActivity(intent);
+                }
+            });
 
         }
     }

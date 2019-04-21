@@ -152,7 +152,7 @@ public class AddSubjectsActivity extends AppCompatActivity {
                     }
                 });
             }
-        }).attachToRecyclerView(recyclerView);
+        });/*.attachToRecyclerView(recyclerView);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
                 recyclerView, new ClickListener() {
             @Override
@@ -162,10 +162,11 @@ public class AddSubjectsActivity extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                CustomDialog1 c=new CustomDialog1();
-                c.show(getSupportFragmentManager(),"Example");
+
+                CustomDialog1 c=new CustomDialog1(AddSubjectsActivity.this);
+                c.show();
             }
-        }));
+        }));*/
 
     }
 

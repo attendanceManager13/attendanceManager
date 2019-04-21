@@ -5,25 +5,50 @@
     android:layout_height="wrap_content"
     android:paddingStart="25dp"
     >
-    <TextView
+    <EditText
         android:id="@+id/dt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:text="Edit Subject Name" />
-    <TextView
+    <EditText
         android:id="@+id/dt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:inputType="number"
         android:text="Edit Attended Lectures"
         android:layout_below="@id/dt1"/>
-    <TextView
+    <EditText
         android:id="@+id/dt3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:inputType="number"
         android:text="Edit Total Lectures"
         android:layout_below="@id/dt2"/>
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:background="@android:color/white"
+        android:clickable="true"
+        android:text="Done"
+        android:textColor="#5DBCD2"
+        android:textStyle="bold"
+        android:layout_below="@+id/dt3"/>
+
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:background="@android:color/white"
+        android:clickable="true"
+        android:text="Cancel"
+        android:textColor="#5DBCD2"
+        android:textStyle="bold"
+        android:layout_toEndOf="@+id/btn_ok"/>
 </RelativeLayout>
