@@ -10,31 +10,31 @@
         android:id="@+id/c1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="170dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginBottom="190dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         app:cardCornerRadius="10dp">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:padding="10dp">
-    <TextView
-        android:id="@+id/ct1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30sp"
-        android:layout_marginTop="30sp"
-        android:text="@string/set_attendance_criteria"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-         />
+            <TextView
+                android:id="@+id/ct1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/set_attendance_criteria"
+                android:layout_marginTop="30sp"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
             <TextView
                 android:id="@+id/ct2"
                 android:text="0%"
                 android:textColor="@android:color/black"
-                android:layout_marginTop="100sp"
-                android:layout_marginStart="115sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"/>
@@ -42,8 +42,8 @@
                 android:id="@+id/seek"
                 android:layout_width="280sp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ct2"
-                android:layout_marginTop="40sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="60sp"
                 android:progressTint="#4b134f"
                 android:progress="0"
                 android:thumbTint="#4b134f"
@@ -53,10 +53,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35sp"
                 android:text="Save"
-                android:layout_marginTop="230sp"
-                android:layout_marginStart="100sp"
+                android:layout_marginTop="50sp"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@android:color/white"
                 android:background="@drawable/roundedbutton4"/>
-        </RelativeLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
